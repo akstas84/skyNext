@@ -1,57 +1,52 @@
 package org.sky.cource1.courcework;
 
 public class Employee {
-    String firstName, middleName, lastName;
-    String fullName;
-    String departmentName;
-    double employeeSalary;
-    static int idCounter = 0;
-    int id;
+    private String fullName;
+    private String departmentName;
+    private double employeeSalary;
+    private static int idCounter = 0;
+    private int id;
 
-    public Employee(String firstName, String middleName, String lastName, String departmentName, int employeeSalary) {
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
+    public Employee(String fullName, String departmentName, int employeeSalary) {
+        this.fullName = fullName;
         this.departmentName = departmentName;
         this.employeeSalary = employeeSalary;
         this.id = idCounter++;
-        this.fullName = getFullName(firstName, middleName, lastName);
     }
 
-    private String getFullName(String firstName, String middleName, String lastName) {
-        return firstName + " " + middleName + " " + lastName;
+    static Employee[] employeesArr;
+
+    public static void main(String[] args) {
+        employeesArr = new Employee[10];
+        employeesArr[0] = new Employee("Vasya Vasin Vas", "1", 100);
+        employeesArr[1] = new Employee("Kolya Kolin Kol", "2", 110);
+        employeesArr[2] = new Employee("Vera Verina Ver", "3", 120);
+        employeesArr[3] = new Employee("Olesya Olesina Ol", "4", 130);
+        employeesArr[4] = new Employee("Petya Petin Pet", "5", 140);
+        employeesArr[5] = new Employee("Stas St St", "5", 130);
+        employeesArr[6] = new Employee("Diana Di Di", "4", 120);
+        employeesArr[7] = new Employee("Olya Ol Ol", "3", 110);
+        employeesArr[8] = new Employee("Valera Davaiy Delaay Veschi", "2", 100);
+        employeesArr[9] = new Employee("Grisha Gr Gr", "1", 90);
+
+        EmployeeBook employeeBook = new EmployeeBook();
+        employeeBook.getFullNameAllEmployeesByDepartment("3");
+
+        employeeBook.addNewEmployee(new Employee("qwe", "qwe", 120), 0);
+        System.out.println();
+        System.out.println(employeeBook.findEmployeeWithMinimumWage());
+
+        System.out.println();
+
+        employeeBook.allEmployeesWithSalaryGreaterThanNumber(120);
     }
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
 
-    public void setEmployeeSalary(int employeeSalary) {
-        this.employeeSalary = employeeSalary;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getMiddleName() {
-        return middleName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getFullName() {
+        return fullName;
     }
 
     public String getDepartmentName() {
@@ -66,18 +61,6 @@ public class Employee {
         this.employeeSalary = employeeSalary;
     }
 
-    public static int getCountId() {
-        return idCounter;
-    }
-
-    public static void setCountId(int countId) {
-        Employee.idCounter = countId;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getId() {
         return id;
     }
@@ -85,20 +68,12 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" + "Имя= " + firstName + ", Отчество= " + middleName + ", Фамилия= " + lastName +
-                " , id= " + id + ", Департамент= " + departmentName + ", Зарплата= " + employeeSalary + '}';
+        return "Employee{" + "Имя Отчество Фамилия= " + fullName + " , id= " + id +
+                ", Департамент= " + departmentName + ", Зарплата= " + employeeSalary + '}';
     }
 
-    public String toStringWithoutDepart(String str) {
-        return "Employee{" + "Имя= " + firstName + ", Отчество= " + middleName + ", Фамилия= " + lastName +
-                " , id= " + id + ", Зарплата= " + employeeSalary + '}';
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String toStringFIO() {
-        return firstName + " " + middleName + " " + lastName;
+    public String toStringWithoutDepart() {
+        return "Employee{" + "Имя Отчество Фамилия= " + fullName + " , id= " + id
+                + ", Зарплата= " + employeeSalary + '}';
     }
 }
