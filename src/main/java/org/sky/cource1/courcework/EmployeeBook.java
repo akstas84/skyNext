@@ -3,24 +3,11 @@ package org.sky.cource1.courcework;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.sky.cource1.courcework.Employee.employeesArr;
-
 public class EmployeeBook {
 
     Employee[] employeesArr = Employee.employeesArr;
 
-//    public static void main(String[] args) {
-//        EmployeeBook employeeBook = new EmployeeBook();
-//        Employee[] employeesArr = employeeBook.putEplInArr();
-//        employeeBook.getEmployeesDataList(employeesArr);
-//        System.out.println();
-//        Employee newEmployee = new Employee("newEmpl newEmpl newEmpl", "newEmpl", 250);
-//        employeeBook.addNewEmployee(employeesArr, newEmployee, 0);
-//        employeeBook.changeEmployeeProperty(employeesArr, "Vasya", 500.00, "3");
-//        employeeBook.getFullNameAllEmployeesByDepartment(employeesArr, "3");
-//    }
-
-    //++++++++++++++++++++++++++++++++++++++++++++++++
+//++++++++++++++++++++++++++++++++++++++++++++++++
 //    **Очень сложно**
 //++++++++++++++++++++++++++++++++++++++++++++++++
 //4. Добавить несколько новых методов:
