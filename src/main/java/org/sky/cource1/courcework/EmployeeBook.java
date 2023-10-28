@@ -5,9 +5,22 @@ import java.util.List;
 
 public class EmployeeBook {
 
-    Employee[] employeesArr = Main.employeesArr;
+    private Employee[] employeesArr = new Employee[10];
 
-//++++++++++++++++++++++++++++++++++++++++++++++++
+    EmployeeBook() {
+        employeesArr[0] = new Employee("Vasya Vasin Vas", "1", 100);
+        employeesArr[1] = new Employee("Kolya Kolin Kol", "2", 110);
+        employeesArr[2] = new Employee("Vera Verina Ver", "3", 120);
+        employeesArr[3] = new Employee("Olesya Olesina Ol", "4", 130);
+        employeesArr[4] = new Employee("Petya Petin Pet", "5", 140);
+        employeesArr[5] = new Employee("Stas St St", "5", 130);
+        employeesArr[6] = new Employee("Diana Di Di", "4", 120);
+        employeesArr[7] = new Employee("Olya Ol Ol", "3", 110);
+        employeesArr[8] = new Employee("Valera Davaiy Delaay Veschi", "2", 100);
+        employeesArr[9] = new Employee("Grisha Gr Gr", "1", 90);
+    }
+
+    //++++++++++++++++++++++++++++++++++++++++++++++++
 //    **Очень сложно**
 //++++++++++++++++++++++++++++++++++++++++++++++++
 //4. Добавить несколько новых методов:
@@ -15,20 +28,20 @@ public class EmployeeBook {
 //    Нужно найти свободную ячейку в массиве и добавить нового сотрудника в нее. Искать нужно всегда с начала,
 //    так как возможно добавление в ячейку удаленных ранее сотрудников.
     public void addNewEmployee(Employee newEmployee, int id) {
-        Employee[] newEmplArr = deleteEmployee(employeesArr, id);
-        for (int i = 0; i < newEmplArr.length; i++) {
-            if (newEmplArr[i] == null) {
-                newEmplArr[i] = newEmployee;
+        for (int i = 0; i < employeesArr.length; i++) {
+            if (employeesArr[i] == null) {
+                employeesArr[i] = newEmployee;
                 break;
             }
         }
     }
 
     // 2. Удалить сотрудника (находим сотрудника по Ф. И. О. и/или id, обнуляем его ячейку в массиве).
-    private Employee[] deleteEmployee(Employee[] employeesArr, int id) {
+    public Employee[] deleteEmployee(int id) {
         for (int i = 0; i < employeesArr.length; i++) {
             if (employeesArr[i] != null && employeesArr[i].getId() == id) {
                 employeesArr[i] = null;
+                break;
             }
         }
         return employeesArr;
@@ -37,16 +50,25 @@ public class EmployeeBook {
     // 5. Изменить сотрудника (получить сотрудника по Ф. И. О., модернизировать его запись):
 // 1. Изменить зарплату. //2. Изменить отдел.
 // Придумать архитектуру. Сделать или два метода, или один, но продумать его.
-    public Employee[] changeEmployeeProperty(String nameEmployee, double salary, String department) {
+    public Employee[] changeEmployeePropertySalary(String nameEmployee, double salary) {
         for (Employee employee : employeesArr) {
-            if (employee.getFullName().equals(nameEmployee) && employee != null) {
+            if (employee != null && employee.getFullName().equals(nameEmployee)) {
                 if (salary > employee.getSalary()) {
                     changeEmployeeSalary(employee, salary);
                 }
+            }
+        }
+        return employeesArr;
+    }
+
+    public Employee[] changeEmployeePropertyDepartment(String nameEmployee, String department) {
+        for (Employee employee : employeesArr) {
+            if (employee != null && employee.getFullName().equals(nameEmployee)) {
                 if (department != employee.getDepartmentName()) {
                     changeEmployeeDepartment(employee, department);
                 }
             }
+
         }
         return employeesArr;
     }
@@ -63,10 +85,8 @@ public class EmployeeBook {
     public List<String> getFullNameAllEmployeesByDepartment(String departmentName) {
         List<String> employeeList = new ArrayList<>();
         for (Employee employee : employeesArr) {
-            if (employee != null) {
-                if (employee.getDepartmentName() == departmentName) {
-                    employeeList.add(employee.getFullName() + " " + employee.getDepartmentName());
-                }
+            if (employee != null && employee.getDepartmentName().equals(departmentName)) {
+                employeeList.add(employee.getFullName() + " " + employee.getDepartmentName());
             }
         }
         return employeeList;
@@ -95,10 +115,10 @@ public class EmployeeBook {
     public Employee findEmployeeWithMinimumWageByDepartmentName(String departmentName) {
         Employee employee = null;
         double minSalary = Integer.MAX_VALUE;
-        List<Employee> employeesArrWithFilter = getFilteredEmployees(employeesArr, departmentName);
+        List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
         for (Employee emp : employeesArrWithFilter) {
             double salary = emp.getSalary();
-            if (salary < minSalary && emp != null) {
+            if (emp != null && salary < minSalary) {
                 minSalary = salary;
                 if (minSalary == salary) {
                     employee = emp;
@@ -108,13 +128,11 @@ public class EmployeeBook {
         return employee;
     }
 
-    private List<Employee> getFilteredEmployees(Employee[] employeesArr, String departmentName) {
+    private List<Employee> getFilteredEmployees(String departmentName) {
         List<Employee> employeesArrWithFilter = new ArrayList<>();
         for (Employee emp : employeesArr) {
-            if (emp.getDepartmentName().equals(departmentName)) {
-                if (emp != null) {
-                    employeesArrWithFilter.add(emp);
-                }
+            if (emp != null && emp.getDepartmentName().equals(departmentName)) {
+                employeesArrWithFilter.add(emp);
             }
         }
         return employeesArrWithFilter;
@@ -122,17 +140,17 @@ public class EmployeeBook {
 
     // 2. Сотрудника с максимальной зарплатой.
     public Employee findEmployeeWithMaximumWageByDepartmentName(String departmentName) {
-        Employee[] employeesArrWithFilter = new Employee[employeesArr.length];
+        List<Employee> employeesArrWithFilter = new ArrayList<>();
         Employee employee = null;
         double maxSalary = Integer.MIN_VALUE;
-        for (int i = 0; i < employeesArr.length; i++) {
-            if (employeesArr[i].getDepartmentName().equals(departmentName)) {
-                employeesArrWithFilter[i] = employeesArr[i];
-            }
-        }
+        for (Employee emp : employeesArr) {
+            if (emp.getDepartmentName().equals(departmentName)) {
+                employeesArrWithFilter.add(emp);
+            }	            }
+
         for (Employee emp : employeesArrWithFilter) {
             double salary = emp.getSalary();
-            if (salary > maxSalary && emp != null) {
+            if (emp != null && salary > maxSalary) {
                 maxSalary = salary;
                 if (maxSalary == salary) {
                     employee = emp;
@@ -145,7 +163,7 @@ public class EmployeeBook {
     // 3. Сумму затрат на зарплату по отделу.
     public double calcAmountSalaryByDepartmentName(String departmentName) {
         double salaryCostsByDepart = 0;
-        List<Employee> employeesArrWithFilter = getFilteredEmployees(employeesArr, departmentName);
+        List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
         for (Employee employee : employeesArrWithFilter) {
             if (employee != null) {
                 salaryCostsByDepart += employee.getSalary();
@@ -156,13 +174,13 @@ public class EmployeeBook {
 
     // 4. Среднюю зарплату по отделу (учесть, что количество людей в отделе отличается от employees.length).
     public Double calcAverageValueSalariesByDepartmentName(String departmentName) {
-        List<Employee> employeesArrWithFilter = getFilteredEmployees(employeesArr, departmentName);
+        List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
         return calcAverageValueSalaries(employeesArrWithFilter.toArray(new Employee[employeesArrWithFilter.size()]));
     }
 
     // 5. Проиндексировать зарплату всех сотрудников отдела на процент, который приходит в качестве параметра.
     public Double indexSalaryByPercentageByDepartmentName(Employee[] employeesArr, double indexUpPercentage, String departmentName) {
-        List<Employee> employeesArrWithFilter = getFilteredEmployees(employeesArr, departmentName);
+        List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
         return indexSalaryByPercentage(employeesArrWithFilter.toArray(new Employee[employeesArrWithFilter.size()]), indexUpPercentage);
     }
 
@@ -178,10 +196,8 @@ public class EmployeeBook {
     //  3. Получить в качестве параметра число и найти:
 //  a. Всех сотрудников с зарплатой меньше числа (вывести id, Ф. И. О. и зарплатой в консоль).
     public void allEmployeesWithSalaryLessThanNumber(double num) {
-        List<Employee> employeesArrWithFilter = new ArrayList<>();
         for (Employee employee : employeesArr) {
-            if (employee.getSalary() < num && employee != null) {
-                employeesArrWithFilter.add(employee);
+            if (employee != null && employee.getSalary() < num) {
                 System.out.println(employee);
             }
         }
@@ -189,13 +205,9 @@ public class EmployeeBook {
 
     //  b. Всех сотрудников с зарплатой больше (или равно) числа (вывести id, Ф. И. О. и зарплатой в консоль).
     public void allEmployeesWithSalaryGreaterThanNumber(double num) {
-        Employee[] employeesArrWithFilter = new Employee[employeesArr.length];
         for (int i = 0; i < employeesArr.length; i++) {
-            if (employeesArr[i].getSalary() >= num && employeesArrWithFilter[i] != null) {
-                employeesArrWithFilter[i] = employeesArr[i];
-                if (employeesArrWithFilter[i] != null) {
-                    System.out.println(employeesArrWithFilter[i]);
-                }
+            if (employeesArr[i] != null && employeesArr[i].getSalary() >= num) {
+                System.out.println(employeesArr[i]);
             }
         }
     }
@@ -264,7 +276,9 @@ public class EmployeeBook {
     //6. Получить Ф. И. О. всех сотрудников (вывести в консоль).
     public void getEmployeesName(Employee[] employeesArr) {
         for (Employee employee : employeesArr) {
-            System.out.println(employee.getFullName());
+            if (employee != null) {
+                System.out.println(employee.getFullName());
+            }
         }
     }
 }
