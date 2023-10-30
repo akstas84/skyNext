@@ -37,34 +37,32 @@ public class EmployeeBook {
     }
 
     // 2. Удалить сотрудника (находим сотрудника по Ф. И. О. и/или id, обнуляем его ячейку в массиве).
-    public Employee[] deleteEmployee(int id) {
+    public void deleteEmployee(int id) {
         for (int i = 0; i < employeesArr.length; i++) {
             if (employeesArr[i] != null && employeesArr[i].getId() == id) {
                 employeesArr[i] = null;
                 break;
             }
         }
-        return employeesArr;
     }
 
     // 5. Изменить сотрудника (получить сотрудника по Ф. И. О., модернизировать его запись):
 // 1. Изменить зарплату. //2. Изменить отдел.
 // Придумать архитектуру. Сделать или два метода, или один, но продумать его.
-    public Employee[] changeEmployeePropertySalary(String nameEmployee, double salary) {
+    public void changeEmployeePropertySalary(String nameEmployee, double salary) {
         for (Employee employee : employeesArr) {
             if (employee != null && employee.getFullName().equals(nameEmployee)) {
-                if (salary > employee.getSalary()) {
+                if (salary != employee.getSalary()) {
                     changeEmployeeSalary(employee, salary);
                 }
             }
         }
-        return employeesArr;
     }
 
     public Employee[] changeEmployeePropertyDepartment(String nameEmployee, String department) {
         for (Employee employee : employeesArr) {
             if (employee != null && employee.getFullName().equals(nameEmployee)) {
-                if (department != employee.getDepartmentName()) {
+                if (!department.equals(employee.getDepartmentName())) {
                     changeEmployeeDepartment(employee, department);
                 }
             }
@@ -99,7 +97,7 @@ public class EmployeeBook {
 //++++++++++++++++++++++++++++++++++++++++++++++++
 //    Создать дополнительные статические методы для решения следующих задач.
 //    1. Проиндексировать зарплату (вызвать изменение зарплат у всех сотрудников на величину аргумента в %).
-    public Double indexSalaryByPercentage(Employee[] employeesArr, double indexUpPercentage) {
+    public void indexSalaryByPercentage(Employee[] employeesArr, double indexUpPercentage) {
         double indexedSalary = 0;
         for (Employee employee : employeesArr) {
             if (employee != null) {
@@ -107,7 +105,6 @@ public class EmployeeBook {
                 employee.setEmployeeSalary(indexedSalary);
             }
         }
-        return indexedSalary;
     }
 
     // 2. Получить в качестве параметра номер отдела (1–5) и найти (всего 6 методов):
@@ -115,13 +112,32 @@ public class EmployeeBook {
     public Employee findEmployeeWithMinimumWageByDepartmentName(String departmentName) {
         Employee employee = null;
         double minSalary = Integer.MAX_VALUE;
-        List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
-        for (Employee emp : employeesArrWithFilter) {
-            double salary = emp.getSalary();
-            if (emp != null && salary < minSalary) {
-                minSalary = salary;
-                if (minSalary == salary) {
-                    employee = emp;
+        for (Employee emp : employeesArr) {
+            if (emp != null && emp.getDepartmentName().equals(departmentName)) {
+                double salary = emp.getSalary();
+                if (salary < minSalary) {
+                    minSalary = salary;
+                    if (minSalary == salary) {
+                        employee = emp;
+                    }
+                }
+            }
+        }
+        return employee;
+    }
+
+    // 2. Сотрудника с максимальной зарплатой.
+    public Employee findEmployeeWithMaximumWageByDepartmentName(String departmentName) {
+        Employee employee = null;
+        double maxSalary = Integer.MIN_VALUE;
+        for (Employee emp : employeesArr) {
+            if (emp != null && emp.getDepartmentName().equals(departmentName)) {
+                double salary = emp.getSalary();
+                if (salary > maxSalary) {
+                    maxSalary = salary;
+                    if (maxSalary == salary) {
+                        employee = emp;
+                    }
                 }
             }
         }
@@ -136,28 +152,6 @@ public class EmployeeBook {
             }
         }
         return employeesArrWithFilter;
-    }
-
-    // 2. Сотрудника с максимальной зарплатой.
-    public Employee findEmployeeWithMaximumWageByDepartmentName(String departmentName) {
-        List<Employee> employeesArrWithFilter = new ArrayList<>();
-        Employee employee = null;
-        double maxSalary = Integer.MIN_VALUE;
-        for (Employee emp : employeesArr) {
-            if (emp.getDepartmentName().equals(departmentName)) {
-                employeesArrWithFilter.add(emp);
-            }	            }
-
-        for (Employee emp : employeesArrWithFilter) {
-            double salary = emp.getSalary();
-            if (emp != null && salary > maxSalary) {
-                maxSalary = salary;
-                if (maxSalary == salary) {
-                    employee = emp;
-                }
-            }
-        }
-        return employee;
     }
 
     // 3. Сумму затрат на зарплату по отделу.
@@ -179,7 +173,7 @@ public class EmployeeBook {
     }
 
     // 5. Проиндексировать зарплату всех сотрудников отдела на процент, который приходит в качестве параметра.
-    public Double indexSalaryByPercentageByDepartmentName(Employee[] employeesArr, double indexUpPercentage, String departmentName) {
+    public Double indexSalaryByPercentageByDepartmentName(double indexUpPercentage, String departmentName) {
         List<Employee> employeesArrWithFilter = getFilteredEmployees(departmentName);
         return indexSalaryByPercentage(employeesArrWithFilter.toArray(new Employee[employeesArrWithFilter.size()]), indexUpPercentage);
     }
